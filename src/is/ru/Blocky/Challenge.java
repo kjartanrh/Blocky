@@ -11,13 +11,19 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class Challenge {
+
+    private int id;
     private int level;
     private int length;
-    private List<BlockPosition> obsticles;
-    private BlockPosition escapee;
+    private List<BlockPosition> blocks;
 
     public Challenge() {
-        obsticles = new ArrayList<BlockPosition>();
+        blocks = new ArrayList<BlockPosition>();
+    }
+
+    public Challenge(int id) {
+        this.id = id;
+        blocks = new ArrayList<BlockPosition>();
     }
 
     public enum Alignment {
@@ -72,6 +78,24 @@ public class Challenge {
             this.blockLength = blockLength;
             this.alignment = alignment;
         }
+
+        public String toString() {
+            StringBuffer sb = new StringBuffer();
+            sb.append( ((alignment == Alignment.Horizontal) ? "Horizontal" : "Vertical")  + "\n");
+            sb.append("X: " + x + "\n");
+            sb.append("Y: " + y + "\n");
+            sb.append("Length: " + blockLength + "\n");
+
+            return sb.toString();
+        }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getLevel() {
@@ -90,20 +114,32 @@ public class Challenge {
         this.length = length;
     }
 
-    public List<BlockPosition> getObsticles() {
-        return obsticles;
+    public List<BlockPosition> getBlocks() {
+        return blocks;
     }
 
-    public void setObsticles(List<BlockPosition> obsticles) {
-        this.obsticles = obsticles;
+    public void setBlocks(List<BlockPosition> blocks) {
+        this.blocks = blocks;
     }
 
     public BlockPosition getEscapee() {
-        return escapee;
+        if(blocks.size() > 0) {
+            return blocks.get(0);
+        } else {
+            return null;
+        }
     }
 
-    public void setEscapee(BlockPosition escapee) {
-        this.escapee = escapee;
-    }
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Id: " + id + "\n");
+        sb.append("Level: " + level + "\n");
+        sb.append("Length: " + length + "\n");
+        sb.append("Blocks: " + "\n");
+        for (BlockPosition block : blocks) {
+            block.toString();
+        }
 
+        return sb.toString();
+    }
 }

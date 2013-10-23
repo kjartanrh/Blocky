@@ -3,6 +3,7 @@ package is.ru.Blocky;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
+import android.util.Log;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -46,7 +47,8 @@ public class ChallengeParser {
                     currentXmlNode = CurrentXmlNode.CHALLENGE;
                 } else if (tag.equalsIgnoreCase("puzzle")) {
                     currentXmlNode = CurrentXmlNode.PUZZLE;
-                    Challenge challenge = new Challenge();
+                    int id = Integer.parseInt(xpp.getAttributeValue(null, "id"));
+                    Challenge challenge = new Challenge(id);
                     challenges.add(challenge);
                 } else if (tag.equalsIgnoreCase("level")) {
                     currentXmlNode = CurrentXmlNode.LEVEL;
@@ -89,12 +91,8 @@ public class ChallengeParser {
                 Challenge challenge = challenges.get(challenges.size() - 1);
 
                 if(blocks.length > 0) {
-                    challenge.setEscapee(parseBlockPosition(blocks[0]));
-
-                    if(blocks.length > 1) {
-                        for( int i = 1; i < blocks.length; i++ ) {
-                            challenge.getObsticles().add(parseBlockPosition(blocks[i]));
-                        }
+                    for( int i = 0; i < blocks.length; i++ ) {
+                        challenge.getBlocks().add(parseBlockPosition(blocks[i]));
                     }
                 }
             }
