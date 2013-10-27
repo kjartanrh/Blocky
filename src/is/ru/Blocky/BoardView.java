@@ -28,7 +28,6 @@ public class BoardView extends View {
     private int m_cellHeight = 0;
     private char[][] m_board = new char[6][6];
     private Paint m_paint = new Paint();
-    private OnMoveEventHandler m_moveHandler = null;
 
     ShapeDrawable m_shape = new ShapeDrawable( new RectShape() );
     Rect board = new Rect();
@@ -116,26 +115,5 @@ public class BoardView extends View {
         return y / m_cellHeight;
     }
 
-    @Override
-    public boolean onTouchEvent( MotionEvent event ) {
 
-        int x = (int) event.getX();
-        int y = (int) event.getY();
-
-        if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
-            if ( m_moveHandler != null ) {
-                m_moveHandler.onMove( xToCol(x), yToRow(y) );
-            }
-        }
-        return true;
-    }
-
-    public void setMoveEventHandler( OnMoveEventHandler handler ) {
-        m_moveHandler = handler;
-    }
-
-    public void setChallenge( Challenge challenge ) {
-        this.currentChallenge = challenge;
-        invalidate();
-    }
 }
