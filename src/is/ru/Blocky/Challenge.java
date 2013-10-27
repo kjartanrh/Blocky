@@ -89,10 +89,17 @@ public class Challenge {
         }
 
         public boolean occupies( int x, int y) {
-            if( this.x == x && this.y == y)
-                return true;
-            else
-                return false;
+            boolean occupies = false;
+            if(this.alignment == Alignment.Horizontal) {
+                if( (( x >= this.x ) && ( x <= (this.x + (this.blockLength - 1) )) ) && y == this.y )  {
+                    occupies = true;
+                }
+            }else {
+                if( (( y >= this.y ) && ( y <= (this.y + (this.blockLength - 1) )) ) && x == this.x )  {
+                    occupies = true;
+                }
+            }
+            return occupies;
         }
 
         public String toString() {
