@@ -43,7 +43,7 @@ public class BoardView extends View {
     public BoardView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mShapes.add(new MyShape(new Rect(0, 25, 50, 150), Color.RED, Orientation.HORIZONTAL));
+        mShapes.add(new MyShape(new Rect(0, 25, 50, 100), Color.RED, Orientation.HORIZONTAL));
         mShapes.add(new MyShape(new Rect(200, 300, 300, 350), Color.BLUE, Orientation.VERTICAL));
     }
 
