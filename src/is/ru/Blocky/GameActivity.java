@@ -24,13 +24,13 @@ public class GameActivity extends Activity {
     private Challenge currentChallenge;
     Button buttonPrevious;
     Button buttonNext;
-    TextView gameBoard;
+    BoardView gameBoard;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
-        gameBoard = (TextView)findViewById(R.id.gameboard);
+        gameBoard = (BoardView)findViewById(R.id.gameboard);
         buttonPrevious = (Button) findViewById(R.id.buttonPrev);
         buttonNext = (Button) findViewById(R.id.buttonNext);
 
@@ -75,7 +75,7 @@ public class GameActivity extends Activity {
         buttonPrevious.setEnabled(!currentChallengeIsFirst());
         buttonNext.setEnabled(!currentChallengeIsLast());
 
-        gameBoard.setText(currentChallenge.toString());
+        //gameBoard.setText(currentChallenge.toString());
     }
 
     private boolean currentChallengeIsFirst() {
@@ -84,5 +84,9 @@ public class GameActivity extends Activity {
 
     private boolean currentChallengeIsLast() {
         return currentChallenge.getId() == challenges.size();
+    }
+
+    private void drawBoard() {
+
     }
 }
