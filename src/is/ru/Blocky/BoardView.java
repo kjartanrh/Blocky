@@ -115,5 +115,8 @@ public class BoardView extends View {
         return y / m_cellHeight;
     }
 
-
+    public void setChallenge( Challenge challenge ) {
+        this.currentChallenge = challenge;
+        invalidate();
+    }
 }
