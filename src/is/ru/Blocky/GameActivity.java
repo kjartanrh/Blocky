@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,6 +65,7 @@ public class GameActivity extends Activity {
                 } else {
                     changeChallenge(1);
                 }
+
             }
         } catch (XmlPullParserException e) {
             // TODO Auto-generated catch block
@@ -82,7 +84,7 @@ public class GameActivity extends Activity {
         buttonPrevious.setEnabled(!currentChallengeIsFirst());
         buttonNext.setEnabled(!currentChallengeIsLast());
 
-        //gameBoard.setText(currentChallenge.toString());
+        gameBoard.setChallenge( currentChallenge );
     }
 
     private boolean currentChallengeIsFirst() {

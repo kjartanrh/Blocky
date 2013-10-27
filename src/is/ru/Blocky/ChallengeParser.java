@@ -90,20 +90,21 @@ public class ChallengeParser {
 
                 if(blocks.length > 0) {
                     for( int i = 0; i < blocks.length; i++ ) {
-                        challenge.getBlocks().add(parseBlockPosition(blocks[i]));
+                        challenge.getBlocks().add(parseBlockPosition(blocks[i], (i == 0)));
                     }
                 }
             }
         }
     }
 
-    private static Challenge.BlockPosition parseBlockPosition(String blockPositionString) {
+    private static Challenge.BlockPosition parseBlockPosition(String blockPositionString, boolean escapee) {
         Challenge challenge = new Challenge();
         Challenge.BlockPosition blockPosition = challenge.new BlockPosition();
         String alignment = String.valueOf(blockPositionString.toCharArray()[1]);
         String x = String.valueOf(blockPositionString.toCharArray()[2]);
         String y = String.valueOf(blockPositionString.toCharArray()[3]);
         String blockLength = String.valueOf(blockPositionString.toCharArray()[4]);
+        blockPosition.setEscapee(escapee);
         if(alignment.equalsIgnoreCase("H")) {
             blockPosition.setAlignment(Challenge.Alignment.Horizontal);
         } else {

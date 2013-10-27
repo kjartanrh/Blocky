@@ -36,6 +36,7 @@ public class Challenge {
         private int y;
         private int blockLength;
         private Alignment alignment;
+        private boolean isEscapee;
 
         public int getX() {
             return x;
@@ -69,6 +70,14 @@ public class Challenge {
             this.alignment = alignment;
         }
 
+        public boolean isEscapee() {
+            return isEscapee;
+        }
+
+        public void setEscapee(boolean escapee) {
+            isEscapee = escapee;
+        }
+
         public BlockPosition() {
         }
 
@@ -77,6 +86,13 @@ public class Challenge {
             this.y = y;
             this.blockLength = blockLength;
             this.alignment = alignment;
+        }
+
+        public boolean occupies( int x, int y) {
+            if( this.x == x && this.y == y)
+                return true;
+            else
+                return false;
         }
 
         public String toString() {
@@ -129,6 +145,8 @@ public class Challenge {
             return null;
         }
     }
+
+
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
