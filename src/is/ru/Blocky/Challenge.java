@@ -137,7 +137,7 @@ public class Challenge {
         sb.append("Length: " + length + "\n");
         sb.append("Blocks: " + "\n");
         for (BlockPosition block : blocks) {
-            block.toString();
+            sb.append(block.toString());
         }
 
         return sb.toString();

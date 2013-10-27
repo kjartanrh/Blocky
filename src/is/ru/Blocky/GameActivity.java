@@ -34,6 +34,7 @@ public class GameActivity extends Activity {
         buttonPrevious = (Button) findViewById(R.id.buttonPrev);
         buttonNext = (Button) findViewById(R.id.buttonNext);
 
+
         buttonPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,7 +57,13 @@ public class GameActivity extends Activity {
         try {
             challenges = ChallengeParser.getChallenges(this);
             if(challenges.size() > 0) {
-                changeChallenge(1);
+                Bundle b = getIntent().getExtras();
+                if(b != null) {
+                int value = b.getInt("level");
+                    changeChallenge(value);
+                } else {
+                    changeChallenge(1);
+                }
             }
         } catch (XmlPullParserException e) {
             // TODO Auto-generated catch block
