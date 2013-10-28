@@ -32,11 +32,19 @@ public class Challenge {
     }
 
     public class BlockPosition {
+        private int index;
         private int x;
         private int y;
         private int blockLength;
         private Alignment alignment;
-        private boolean isEscapee;
+
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
 
         public int getX() {
             return x;
@@ -71,11 +79,7 @@ public class Challenge {
         }
 
         public boolean isEscapee() {
-            return isEscapee;
-        }
-
-        public void setEscapee(boolean escapee) {
-            isEscapee = escapee;
+            return index == 0;
         }
 
         public BlockPosition() {
@@ -88,18 +92,18 @@ public class Challenge {
             this.alignment = alignment;
         }
 
-        public boolean occupies( int x, int y) {
-            boolean occupies = false;
+        public boolean contains(int x, int y) {
+            boolean contains = false;
             if(this.alignment == Alignment.Horizontal) {
                 if( (( x >= this.x ) && ( x <= (this.x + (this.blockLength - 1) )) ) && y == this.y )  {
-                    occupies = true;
+                    contains = true;
                 }
             }else {
                 if( (( y >= this.y ) && ( y <= (this.y + (this.blockLength - 1) )) ) && x == this.x )  {
-                    occupies = true;
+                    contains = true;
                 }
             }
-            return occupies;
+            return contains;
         }
 
         public String toString() {
@@ -153,7 +157,33 @@ public class Challenge {
         }
     }
 
+    public BlockPosition getBlockAtXY(int x, int y) throws BlockNotFoundException {
+        int index = -1;
 
+        for(int i = 0; i < blocks.size(); i++) {
+            if(blocks.get(i).contains(x,y)) {
+                index = i;
+            }
+        }
+
+        if(index == -1) {
+            throw new BlockNotFoundException();
+        } else {
+            return blocks.get(index);
+        }
+    }
+
+    public void moveBlock(int blockId, int offset) {
+        if( blockId < blocks.size()) {
+            BlockPosition blockToMove = blocks.get(blockId);
+
+            if(blockToMove.getAlignment() == Alignment.Horizontal) {
+                blockToMove.setX(blockToMove.getX() + offset);
+            } else {
+                blockToMove.setY(blockToMove.getY() + offset);
+            }
+        }
+    }
 
     public String toString() {
         StringBuffer sb = new StringBuffer();

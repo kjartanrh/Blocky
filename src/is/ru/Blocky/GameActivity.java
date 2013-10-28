@@ -35,6 +35,16 @@ public class GameActivity extends Activity {
         buttonPrevious = (Button) findViewById(R.id.buttonPrev);
         buttonNext = (Button) findViewById(R.id.buttonNext);
 
+        gameBoard.setMoveEventHandler(new OnMoveEventHandler() {
+            @Override
+            public void onMove(int blockId, int offset) {
+                String point = "Move block id: " + blockId + " by " + offset + " points.";
+                Toast.makeText(getApplicationContext(), point, Toast.LENGTH_SHORT).show();
+                //TODO: update moveBlock function in Challenge.java so that it checks if it is allowed to move
+                currentChallenge.moveBlock(blockId, offset);
+                gameBoard.invalidate();
+            }
+        });
 
         buttonPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +105,4 @@ public class GameActivity extends Activity {
         return currentChallenge.getId() == challenges.size();
     }
 
-    private void drawBoard() {
-
-    }
 }

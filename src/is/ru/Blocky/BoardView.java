@@ -1,20 +1,13 @@
 package is.ru.Blocky;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.*;
 import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RectShape;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,6 +21,10 @@ public class BoardView extends View {
     private int m_cellHeight = 0;
     private char[][] m_board = new char[6][6];
     private Paint m_paint = new Paint();
+    private OnMoveEventHandler moveHandler;
+    private Challenge.BlockPosition blockToMove;
+    private Point selectPoint;
+    private boolean isDown = false;
 
     ShapeDrawable m_shape = new ShapeDrawable( new RectShape() );
     Rect board = new Rect();
@@ -38,18 +35,6 @@ public class BoardView extends View {
         m_paint.setColor( Color.WHITE );
         m_paint.setStyle( Paint.Style.STROKE );
     }
-
-    /*  WAS USED IN TIC TAC TOE, FOR LOOP DIFFICULT
-    public void setBoard( String string )
-    {
-        for ( int idx=0, r=5; r>=0; --r ) {
-            for ( int c=0; c<6; ++c, ++idx ) {
-                m_board[c][r] = string.charAt( idx );
-            }
-        }
-        invalidate();
-    }
-    */
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -81,28 +66,11 @@ public class BoardView extends View {
                         if( block.isEscapee() ) {
                             m_shape.getPaint().setColor( Color.BLUE );
                         }
-                        if( block.occupies(c,r)){
+                        if( block.contains(c, r)){
                             m_shape.draw( canvas );
                         }
                     }
                 }
-
-
-                //board.inset( (int)(board.width() * 0.1), (int)(board.height() * 0.1) );
-                /*m_shape.setBounds( m_rect );
-                switch ( m_board[c][r] ) {
-                    case 'x':
-                        m_shape.getPaint().setColor( Color.RED );
-                        m_shape.draw( canvas );
-                        break;
-                    case 'o':
-                        m_shape.getPaint().setColor( Color.BLUE );
-                        m_shape.draw( canvas );
-                        break;
-                    default:
-                        break;
-                }*/
-
             }
         }
     }
@@ -118,5 +86,48 @@ public class BoardView extends View {
     public void setChallenge( Challenge challenge ) {
         this.currentChallenge = challenge;
         invalidate();
+    }
+
+    public boolean onTouchEvent(MotionEvent event ) {
+        Point point = new Point();
+        point.x = (int) event.getX();
+        point.y = (int) event.getY();
+
+        if ( event.getAction() == MotionEvent.ACTION_DOWN && moveHandler != null) {
+            try {
+                blockToMove = currentChallenge.getBlockAtXY(xToCol(point.x), yToRow(point.y));
+                selectPoint = new Point();
+                selectPoint.set(xToCol(point.x), yToRow(point.y));
+                this.isDown = true;
+            } catch (BlockNotFoundException ex) {
+                blockToMove = null;
+            }
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE
+                                     && isDown
+                                     && moveHandler != null
+                                     && blockToMove != null) {
+            int offset = 0;
+
+            if(blockToMove.getAlignment() == Challenge.Alignment.Horizontal) {
+                offset = xToCol(point.x) - selectPoint.x;
+            } else {
+                offset = yToRow(point.y) - selectPoint.y;
+            }
+            if( offset != 0) {
+                moveHandler.onMove(blockToMove.getIndex(), offset);
+                selectPoint = new Point();
+                selectPoint.set(xToCol(point.x), yToRow(point.y));
+            }
+
+        } else if (event.getAction() == MotionEvent.ACTION_UP && moveHandler != null) {
+            isDown = false;
+        }
+
+
+        return true;
+    }
+
+    public void setMoveEventHandler( OnMoveEventHandler handler ) {
+        moveHandler = handler;
     }
 }
