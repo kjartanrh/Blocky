@@ -1,5 +1,7 @@
 package is.ru.Blocky;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -173,16 +175,66 @@ public class Challenge {
         }
     }
 
-    public void moveBlock(int blockId, int offset) {
+    public void moveBlock(int blockId, int offset ) {
         if( blockId < blocks.size()) {
             BlockPosition blockToMove = blocks.get(blockId);
+            boolean canMove = canMoveBlock( blockToMove, offset );
 
-            if(blockToMove.getAlignment() == Alignment.Horizontal) {
-                blockToMove.setX(blockToMove.getX() + offset);
-            } else {
-                blockToMove.setY(blockToMove.getY() + offset);
+            if( canMove ){
+                if(blockToMove.getAlignment() == Alignment.Horizontal) {
+                    blockToMove.setX(blockToMove.getX() + offset);
+                } else {
+                    blockToMove.setY(blockToMove.getY() + offset);
+                }
             }
         }
+    }
+
+    /**
+     * Athugar hvort megi færa blokkina, með tilliti til jaðars spilaborðs og árekstrar við aðra kubba.
+     *
+     * @todo Virkar ekki ef blokkin er dregin of hratt
+     * @param pos
+     * @param offset
+     * @return
+     */
+    private boolean canMoveBlock(BlockPosition pos, int offset){
+        //Logs out pos info
+
+
+        //Check if we are moving out of bounds
+        if( pos.getAlignment() == Alignment.Horizontal ){
+            if((pos.getX() == 0) && (offset == -1)){
+                return false;
+            }
+
+            if((pos.getX()+pos.getBlockLength() > 5) && (offset == 1)){
+                return false;
+            }
+        }
+        else{
+            if((pos.getY() == 0) && (offset == -1)){
+                return false;
+            }
+
+            if((pos.getY()+pos.getBlockLength() > 5) && (offset == 1)){
+                return false;
+            }
+        }
+
+        boolean found = false;
+        for( BlockPosition block : blocks ){
+            //Check to see if we're colliding with ourselves
+            if(block.getIndex() != pos.getIndex() ){
+                found = occupies(block, pos, offset);
+            }
+        }
+
+        return !found;
+    }
+
+    private boolean occupies(BlockPosition checkedBlock, BlockPosition movingBlock, int offset){
+        return false;
     }
 
     public String toString() {

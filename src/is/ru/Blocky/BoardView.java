@@ -61,7 +61,7 @@ public class BoardView extends View {
                 if( currentChallenge != null )
                 {
                     for(Challenge.BlockPosition block : currentChallenge.getBlocks() ){
-                        m_shape.getPaint().setColor( Color.RED );
+                        m_shape.getPaint().setColor( Color.rgb(255,( 30 * block.getIndex()), 0) );
 
                         if( block.isEscapee() ) {
                             m_shape.getPaint().setColor( Color.BLUE );
@@ -115,6 +115,7 @@ public class BoardView extends View {
             }
             if( offset != 0) {
                 moveHandler.onMove(blockToMove.getIndex(), offset);
+
                 selectPoint = new Point();
                 selectPoint.set(xToCol(point.x), yToRow(point.y));
             }
