@@ -2,13 +2,11 @@ package is.ru.Blocky;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
+import android.widget.*;
 import org.xmlpull.v1.XmlPullParserException;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AdapterView.OnItemClickListener;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,8 +21,8 @@ import java.util.List;
  */
 public class PuzzleMenuActivity extends ListActivity {
 
-    SimpleCursorAdapter mAdapter;
-    ListView puzzleList;
+    private PuzzleMenuAdapter puzzleMenuAdapter = new PuzzleMenuAdapter( this );
+    private SimpleCursorAdapter cursorAdapter;
     private List<Challenge> challenges = new ArrayList<Challenge>();
 
 
@@ -47,20 +45,49 @@ public class PuzzleMenuActivity extends ListActivity {
             values.add("Puzzle " + i);
         }
 
-        setListAdapter(new ArrayAdapter<String>(this,R.layout.selectpuzzle,values));
 
-        ListView listView = getListView();
-        listView.setTextFilterEnabled(true);
+        Cursor cursor = puzzleMenuAdapter.queryPuzzlesSolved();
+        String[] cols = DBHelper.TablePuzzlesSolvedCol;
+        String[] from = { cols[1], cols[2] };
+        int[] to = { R.id.s_puzzlename, R.id.s_completed };
 
-        listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Intent intent = new Intent(PuzzleMenuActivity.this, GameActivity.class);
-                Bundle b = new Bundle();
-                b.putInt("level", (int)(id +1));
-                intent.putExtras(b);
-                startActivity(intent);
+        startManagingCursor( cursor );
+        cursorAdapter = new SimpleCursorAdapter( this, R.layout.selectpuzzle, cursor, from, to );
+
+        cursorAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Cursor cursor, int i) {
+                if ( i == 1 ) {
+                    ((TextView) view).setText("Puzzle " + cursor.getInt(i));
+                    return true;
+                }
+                if ( i == 2 ) {
+                    ((ImageView) view).setImageResource(
+                            (cursor.getInt(i) == 0) ? R.drawable.uncompleted : R.drawable.completed );
+                    return true;
+                }
+                return false;
             }
         });
+
+        setListAdapter(cursorAdapter);
+    }
+
+    protected void onListItemClick( ListView l, View v, int position, long id  ) {
+        Intent intent = new Intent(PuzzleMenuActivity.this, GameActivity.class);
+        Bundle b = new Bundle();
+        b.putInt("level", (int)(id));
+        intent.putExtras(b);
+        startActivity(intent);
+    }
+
+    protected void onRestart() {
+        super.onRestart();
+        cursorAdapter.getCursor().requery();
+    }
+
+    protected void onDestroy() {
+        super.onRestart();
+        puzzleMenuAdapter.close();
     }
 }
