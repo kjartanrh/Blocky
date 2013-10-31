@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class ChallengeParser {
 
-    private static List<Challenge> challenges = new ArrayList<Challenge>();
+    private static ArrayList<Challenge> challenges = new ArrayList<Challenge>();
     private enum CurrentXmlNode {
         NONE,
         CHALLENGE,
@@ -28,7 +28,7 @@ public class ChallengeParser {
         SETUP
     }
 
-    public static List<Challenge> getChallenges(Activity activity)
+    public static ArrayList<Challenge> getChallenges(Activity activity)
             throws XmlPullParserException, IOException
     {
         CurrentXmlNode currentXmlNode = CurrentXmlNode.NONE;

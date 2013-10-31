@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.widget.*;
 import org.xmlpull.v1.XmlPullParserException;
 import android.view.View;
-import android.widget.AdapterView.OnItemClickListener;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class PuzzleMenuActivity extends ListActivity {
 
-    private PuzzleMenuAdapter puzzleMenuAdapter = new PuzzleMenuAdapter( this );
+    private PuzzlesDbAdapter puzzlesDbAdapter = new PuzzlesDbAdapter( this );
     private SimpleCursorAdapter cursorAdapter;
     private List<Challenge> challenges = new ArrayList<Challenge>();
 
@@ -46,7 +46,7 @@ public class PuzzleMenuActivity extends ListActivity {
         }
 
 
-        Cursor cursor = puzzleMenuAdapter.queryPuzzlesSolved();
+        Cursor cursor = puzzlesDbAdapter.queryPuzzlesSolved();
         String[] cols = DBHelper.TablePuzzlesSolvedCol;
         String[] from = { cols[1], cols[2] };
         int[] to = { R.id.s_puzzlename, R.id.s_completed };
@@ -88,6 +88,6 @@ public class PuzzleMenuActivity extends ListActivity {
 
     protected void onDestroy() {
         super.onRestart();
-        puzzleMenuAdapter.close();
+        puzzlesDbAdapter.close();
     }
 }

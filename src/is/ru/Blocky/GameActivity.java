@@ -21,7 +21,7 @@ import java.util.List;
 */
 public class GameActivity extends Activity {
 
-    private List<Challenge> challenges = new ArrayList<Challenge>();
+    private ArrayList<Challenge> challenges = new ArrayList<Challenge>();
     private Challenge currentChallenge;
     Button buttonPrevious;
     Button buttonNext;
@@ -64,25 +64,26 @@ public class GameActivity extends Activity {
             }
         });
 
-        String stringXmlContent;
-        try {
-            challenges = ChallengeParser.getChallenges(this);
-            if(challenges.size() > 0) {
-                Bundle b = getIntent().getExtras();
-                if(b != null) {
-                int value = b.getInt("level");
-                    changeChallenge(value);
-                } else {
-                    changeChallenge(1);
-                }
-
+        if(savedInstanceState != null) {
+            challenges = savedInstanceState.getParcelableArrayList("laststate");
+        } else {
+            try {
+                challenges = ChallengeParser.getChallenges(this);
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (XmlPullParserException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        }
+
+        if(challenges.size() > 0) {
+            Bundle b = getIntent().getExtras();
+            if(b != null) {
+                int value = b.getInt("level");
+                changeChallenge(value);
+            } else {
+                changeChallenge(1);
+            }
         }
     }
 
@@ -105,4 +106,9 @@ public class GameActivity extends Activity {
         return currentChallenge.getId() == challenges.size();
     }
 
+    @Override
+    public void onSaveInstanceState( Bundle savedInstanceState ) {
+        super.onSaveInstanceState( savedInstanceState );
+        savedInstanceState.putParcelableArrayList("laststate", challenges);
+    }
 }

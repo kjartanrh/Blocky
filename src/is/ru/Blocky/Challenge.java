@@ -1,7 +1,9 @@
 package is.ru.Blocky;
 
+import android.os.Parcel;
 import android.util.Log;
 
+import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +14,7 @@ import java.util.List;
  * Time: 19:39
  * To change this template use File | Settings | File Templates.
  */
-public class Challenge {
+public class Challenge implements Parcelable {
 
     private int id;
     private int level;
@@ -28,12 +30,33 @@ public class Challenge {
         blocks = new ArrayList<BlockPosition>();
     }
 
+    public Challenge(Parcel in) {
+        id = in.readInt();
+        level = in.readInt();
+        length = in.readInt();
+        blocks = in.readArrayList(getClass().getClassLoader());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(level);
+        dest.writeInt(length);
+        dest.writeList(blocks);
+    }
+
     public enum Alignment {
         Vertical,
         Horizontal
     }
 
-    public class BlockPosition {
+    public class BlockPosition implements Parcelable {
+
         private int index;
         private int x;
         private int y;
@@ -87,6 +110,13 @@ public class Challenge {
         public BlockPosition() {
         }
 
+        public BlockPosition(Parcel in) {
+            x = in.readInt();
+            y = in.readInt();
+            blockLength = in.readInt();
+            alignment = (in.readInt() == 0) ? Alignment.Horizontal : Alignment.Vertical;
+        }
+
         public BlockPosition(int x, int y, int blockLength, Alignment alignment) {
             this.x = x;
             this.y = y;
@@ -116,6 +146,19 @@ public class Challenge {
             sb.append("Length: " + blockLength + "\n");
 
             return sb.toString();
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(x);
+            dest.writeInt(y);
+            dest.writeInt(blockLength);
+            dest.writeInt((alignment == Alignment.Horizontal) ? 0 : 1);
         }
     }
 

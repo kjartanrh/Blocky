@@ -12,22 +12,22 @@ import android.database.sqlite.SQLiteDatabase;
  * Time: 16:50
  * To change this template use File | Settings | File Templates.
  */
-public class PuzzleMenuAdapter {
+public class PuzzlesDbAdapter {
     SQLiteDatabase db;
     DBHelper dbHelper;
     Context context;
 
-    PuzzleMenuAdapter( Context c ) {
+    PuzzlesDbAdapter(Context c) {
         context = c;
     }
 
-    public PuzzleMenuAdapter openToRead() {
+    public PuzzlesDbAdapter openToRead() {
         dbHelper = new DBHelper(context);
         db = dbHelper.getReadableDatabase();
         return this;
     }
 
-    public PuzzleMenuAdapter openToWrite() {
+    public PuzzlesDbAdapter openToWrite() {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
         return this;
