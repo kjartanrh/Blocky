@@ -38,8 +38,8 @@ public class GameActivity extends Activity {
         gameBoard.setMoveEventHandler(new OnMoveEventHandler() {
             @Override
             public void onMove(int blockId, int offset) {
-                String point = "Move block id: " + blockId + " by " + offset + " points.";
-                Toast.makeText(getApplicationContext(), point, Toast.LENGTH_SHORT).show();
+                //String point = "Move block id: " + blockId + " by " + offset + " points.";
+                //Toast.makeText(getApplicationContext(), point, Toast.LENGTH_SHORT).show();
                 //TODO: update moveBlock function in Challenge.java so that it checks if it is allowed to move
                 currentChallenge.moveBlock(blockId, offset);
                 gameBoard.invalidate();

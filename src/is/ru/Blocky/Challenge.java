@@ -177,14 +177,13 @@ public class Challenge {
 
     public void moveBlock(int blockId, int offset ) {
         if( blockId < blocks.size()) {
-            BlockPosition blockToMove = blocks.get(blockId);
-            boolean canMove = canMoveBlock( blockToMove, offset );
+            boolean canMove = canMoveBlock( blocks.get(blockId), offset );
 
             if( canMove ){
-                if(blockToMove.getAlignment() == Alignment.Horizontal) {
-                    blockToMove.setX(blockToMove.getX() + offset);
+                if(blocks.get(blockId).getAlignment() == Alignment.Horizontal) {
+                    blocks.get(blockId).setX(blocks.get(blockId).getX() + offset);
                 } else {
-                    blockToMove.setY(blockToMove.getY() + offset);
+                    blocks.get(blockId).setY(blocks.get(blockId).getY() + offset);
                 }
             }
         }
@@ -199,16 +198,13 @@ public class Challenge {
      * @return
      */
     private boolean canMoveBlock(BlockPosition pos, int offset){
-        //Logs out pos info
-
-
         //Check if we are moving out of bounds
         if( pos.getAlignment() == Alignment.Horizontal ){
             if((pos.getX() == 0) && (offset == -1)){
                 return false;
             }
 
-            if((pos.getX()+pos.getBlockLength() > 5) && (offset == 1)){
+            if((pos.getX()+pos.getBlockLength() == 6) && (offset == 1)){
                 return false;
             }
         }
@@ -217,23 +213,66 @@ public class Challenge {
                 return false;
             }
 
-            if((pos.getY()+pos.getBlockLength() > 5) && (offset == 1)){
+            if((pos.getY()+pos.getBlockLength() == 6) && (offset == 1)){
                 return false;
             }
         }
 
         boolean found = false;
+
         for( BlockPosition block : blocks ){
             //Check to see if we're colliding with ourselves
             if(block.getIndex() != pos.getIndex() ){
-                found = occupies(block, pos, offset);
+                if( pos.getAlignment() == Alignment.Horizontal ){
+                    if( offset == -1 ) {
+                        found = occupies(block, (pos.getX() - 1), pos.getY());
+                    }
+                    else{
+                        found = occupies(block, (pos.getX() + pos.getBlockLength() ), pos.getY());
+                    }
+                }
+                else{
+                    if( offset == -1 ) {
+                        found = occupies(block, pos.getX(), (pos.getY() - 1) );
+                    }
+                    else{
+                        found = occupies(block, pos.getX(), (pos.getY() + pos.getBlockLength() ));
+                    }
+                }
             }
         }
 
         return !found;
     }
 
-    private boolean occupies(BlockPosition checkedBlock, BlockPosition movingBlock, int offset){
+    private boolean occupies(BlockPosition checkedBlock, int x, int y){
+        if( checkedBlock.getAlignment() == Alignment.Horizontal ){
+
+            int startingX = checkedBlock.getX();
+            int finishingX = checkedBlock.getX() + checkedBlock.getBlockLength() - 1;
+
+            for( int i = startingX; i <= finishingX; i++){
+                if( i == x ){
+                    if( y == checkedBlock.getY()){
+                        Log.v("Tag", "Block @index " + checkedBlock.getIndex() + " is blocking (" + x + ", " + y + ")");
+                        return true;
+                    }
+                }
+            }
+        }
+        else{
+            int startingY = checkedBlock.getY();
+            int finishingY = checkedBlock.getY() + checkedBlock.getBlockLength() - 1;
+
+            for( int i = startingY; i <= finishingY; i++){
+                if( i == y ){
+                    if( x == checkedBlock.getX()){
+                        Log.v("Tag", "Block @index " + checkedBlock.getIndex() + " is blocking (" + x + ", " + y + ")");
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
