@@ -42,6 +42,9 @@ public class GameActivity extends Activity {
                 //Toast.makeText(getApplicationContext(), point, Toast.LENGTH_SHORT).show();
                 //TODO: update moveBlock function in Challenge.java so that it checks if it is allowed to move
                 currentChallenge.moveBlock(blockId, offset);
+                if( currentChallenge.isSolved() ){
+                    Toast.makeText(getApplicationContext(), "PUZZLE SOLVED", Toast.LENGTH_SHORT).show();
+                }
                 gameBoard.invalidate();
             }
         });

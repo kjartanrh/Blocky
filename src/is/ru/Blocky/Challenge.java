@@ -19,6 +19,7 @@ public class Challenge implements Parcelable {
     private int id;
     private int level;
     private int length;
+    private boolean solved;
     private List<BlockPosition> blocks;
 
     public Challenge() {
@@ -34,6 +35,7 @@ public class Challenge implements Parcelable {
         id = in.readInt();
         level = in.readInt();
         length = in.readInt();
+        solved = false;
         blocks = in.readArrayList(getClass().getClassLoader());
     }
 
@@ -186,6 +188,14 @@ public class Challenge implements Parcelable {
         this.length = length;
     }
 
+    public boolean isSolved() {
+        return solved;
+    }
+
+    public void setSolved(boolean solved) {
+        this.solved = solved;
+    }
+
     public List<BlockPosition> getBlocks() {
         return blocks;
     }
@@ -219,7 +229,6 @@ public class Challenge implements Parcelable {
     }
 
     public void moveBlock(int blockId, int offset ) {
-        boolean gameOver = false;
         if( blockId < blocks.size()) {
             boolean canMove = canMoveBlock( blocks.get(blockId), offset );
 
@@ -231,17 +240,13 @@ public class Challenge implements Parcelable {
                     if(blockId == 0 ){
                         int x = blocks.get(blockId).getX();
                         if( x == 4 ){
-                            gameOver = true;
+                            setSolved(true);
                         }
                     }
                 } else {
                     blocks.get(blockId).setY(blocks.get(blockId).getY() + offset);
                 }
             }
-        }
-
-        if( gameOver ){
-            Log.v("Tag", "Game Over");
         }
     }
 

@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
         });
 
         //Muna eftir að henda þessum kóða út -> AUTOSTARTER
-        Intent intent = new Intent(MainActivity.this, GameActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(MainActivity.this, GameActivity.class);
+        //startActivity(intent);
     }
 }

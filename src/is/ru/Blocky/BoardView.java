@@ -61,11 +61,56 @@ public class BoardView extends View {
                 if( currentChallenge != null )
                 {
                     for(Challenge.BlockPosition block : currentChallenge.getBlocks() ){
-                        m_shape.getPaint().setColor( Color.rgb(255,( 30 * block.getIndex()), 0) );
+                        switch( block.getIndex() ){
+                            case 0:
+                                m_shape.getPaint().setColor( Color.BLUE );
+                                break;
+                            case 1:
+                                m_shape.getPaint().setColor( Color.RED );
+                                break;
+                            case 2:
+                                m_shape.getPaint().setColor( Color.GREEN );
+                                break;
+                            case 3:
+                                m_shape.getPaint().setColor( Color.YELLOW );
+                                break;
+                            case 4:
+                                m_shape.getPaint().setColor( Color.CYAN );
+                                break;
+                            case 5:
+                                m_shape.getPaint().setColor( Color.GRAY );
+                                break;
+                            case 6:
+                                m_shape.getPaint().setColor( Color.MAGENTA );
+                                break;
+                            case 7:
+                                m_shape.getPaint().setColor( Color.DKGRAY );
+                                break;
+                            case 8:
+                                m_shape.getPaint().setColor( Color.WHITE );
+                                break;
+                            case 9:
+                                m_shape.getPaint().setColor( Color.BLACK );
+                                break;
+                            case 10:
+                                m_shape.getPaint().setColor( Color.rgb(255,120,0) );
+                                break;
+                            case 11:
+                                m_shape.getPaint().setColor( Color.rgb(255,190,0) );
+                                break;
+                            case 12:
+                                m_shape.getPaint().setColor( Color.rgb(230,0,150) );
+                                break;
+                            case 13:
+                                m_shape.getPaint().setColor( Color.rgb(230,0,30) );
+                                break;
+                            case 14:
+                            default:
+                                m_shape.getPaint().setColor( Color.rgb(0,255,100) );
+                                break;
 
-                        if( block.isEscapee() ) {
-                            m_shape.getPaint().setColor( Color.BLUE );
                         }
+
                         if( block.contains(c, r)){
                             m_shape.draw( canvas );
                         }
