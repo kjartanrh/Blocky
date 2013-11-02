@@ -219,16 +219,29 @@ public class Challenge implements Parcelable {
     }
 
     public void moveBlock(int blockId, int offset ) {
+        boolean gameOver = false;
         if( blockId < blocks.size()) {
             boolean canMove = canMoveBlock( blocks.get(blockId), offset );
 
             if( canMove ){
                 if(blocks.get(blockId).getAlignment() == Alignment.Horizontal) {
                     blocks.get(blockId).setX(blocks.get(blockId).getX() + offset);
+
+
+                    if(blockId == 0 ){
+                        int x = blocks.get(blockId).getX();
+                        if( x == 4 ){
+                            gameOver = true;
+                        }
+                    }
                 } else {
                     blocks.get(blockId).setY(blocks.get(blockId).getY() + offset);
                 }
             }
+        }
+
+        if( gameOver ){
+            Log.v("Tag", "Game Over");
         }
     }
 
@@ -283,6 +296,9 @@ public class Challenge implements Parcelable {
                     }
                 }
             }
+            if( found ){
+                break;
+            }
         }
 
         return !found;
@@ -297,7 +313,6 @@ public class Challenge implements Parcelable {
             for( int i = startingX; i <= finishingX; i++){
                 if( i == x ){
                     if( y == checkedBlock.getY()){
-                        Log.v("Tag", "Block @index " + checkedBlock.getIndex() + " is blocking (" + x + ", " + y + ")");
                         return true;
                     }
                 }
@@ -310,7 +325,6 @@ public class Challenge implements Parcelable {
             for( int i = startingY; i <= finishingY; i++){
                 if( i == y ){
                     if( x == checkedBlock.getX()){
-                        Log.v("Tag", "Block @index " + checkedBlock.getIndex() + " is blocking (" + x + ", " + y + ")");
                         return true;
                     }
                 }
