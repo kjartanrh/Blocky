@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.xmlpull.v1.XmlPullParserException;
@@ -23,6 +24,8 @@ public class GameActivity extends Activity {
 
     private ArrayList<Challenge> challenges = new ArrayList<Challenge>();
     private Challenge currentChallenge;
+    private PuzzlesDbAdapter puzzlesDbAdapter = new PuzzlesDbAdapter( this );
+
     Button buttonPrevious;
     Button buttonNext;
     BoardView gameBoard;
@@ -43,6 +46,7 @@ public class GameActivity extends Activity {
                 //TODO: update moveBlock function in Challenge.java so that it checks if it is allowed to move
                 currentChallenge.moveBlock(blockId, offset);
                 if( currentChallenge.isSolved() ){
+                    puzzlesDbAdapter.updatePuzzleSolved(currentChallenge.getId(), true);
                     Toast.makeText(getApplicationContext(), "PUZZLE SOLVED", Toast.LENGTH_SHORT).show();
                 }
                 gameBoard.invalidate();
